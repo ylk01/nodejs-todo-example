@@ -1,10 +1,12 @@
+import 'whatwg-fetch';
+
 const apiURL = 'http://localhost:6701';
 const todoService = {
     list() {
         return fetch(apiURL + '/list').then(data => data.json());
     },
     add(item) {
-        return fetch(apiURL + '/add', { 
+        return fetch(apiURL + '/add', {
             method: 'POST',
             body: JSON.stringify(item),
             headers: new Headers({ 'Content-Type' : 'application/json'})

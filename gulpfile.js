@@ -2,16 +2,7 @@ const gulp = require('gulp');
 const babel = require('gulp-babel');
 const browserify = require('gulp-browserify');
 
-gulp.task('browserify-first', () => {
-    gulp.src('client/app.js')
-    .pipe(browserify({ sourceType: "module" }))
-    .pipe(babel({ presets: ['es2015'] }))
-    .pipe(gulp.dest('dist/'));
-
-    gulp.src('client/index.html').pipe(gulp.dest('dist/ready'));
-});
-
-gulp.task('babel-first', () => {
+gulp.task('default', () => {
     gulp.src('client/*.js')
     .pipe(babel({ presets: ['es2015'] }))
     .pipe(gulp.dest('dist/tmp'))

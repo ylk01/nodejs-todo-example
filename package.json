@@ -16,6 +16,7 @@
     "gulp-browserify": "^0.5.1"
   },
   "dependencies": {
-    "body-parser": "^1.15.2"
+    "body-parser": "^1.15.2",
+    "whatwg-fetch": "^1.0.0"
   }
 }
