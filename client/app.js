@@ -1,32 +1,30 @@
 import { todoService } from './service';
 import createList from './list';
 import createFlash from './flash';
+import renderForm from './form';
 
-const listUI = document.querySelector('#todo-list');
-const inputUI = document.querySelector('#new-todo');
+const renderList = createList(document.querySelector('#todo-list'));
 
 const flash = createFlash(document.querySelector('#flash'));
-        
-const updateList = () => {
-     todoService.list()
-        .then(items => { listUI.innerHTML = createList(items); });
-};
 
-window.actions = {
-    newToDo() {
-        todoService.add({ text: inputUI.value }).then(() => {
-            inputUI.value = null;
-            flash('added successfully!');
-            updateList();
-        });
-        
-    },
-    deleteItem(index) {
-        todoService.remove(index).then(() => {
-            flash('removed successfully!');
-            updateList();
-        });
-    }
-};
+const list = () => todoService.list().then(renderList);
 
-updateList();
+const add = text => todoService.add({ text })
+                            .then(flash('added successfully!'))
+                            .then(list);
+
+const remove = index => todoService.remove(index)
+                            .then(flash('removed successfully!'))
+                            .then(list);
+
+const mainLoop = () => todoService.pollChanges()
+                            .then(list)
+                            .then(mainLoop);
+
+
+window.actions = { add, remove };
+
+list();
+mainLoop();
+renderForm(document.querySelector('#todo-form'));
+

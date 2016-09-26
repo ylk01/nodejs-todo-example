@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-const apiURL = 'http://localhost:6701';
+const apiURL = 'http://192.168.7.145:6701';
 const todoService = {
     list() {
         return fetch(apiURL + '/list').then(data => data.json());
@@ -14,12 +14,16 @@ const todoService = {
     },
     remove(index) {
         return fetch(apiURL + '/remove/' + index, { method: 'POST' }).then(data => data.json());
+    },
+    pollChanges() {
+        return fetch(apiURL + '/poll');
     }
 };
 
 
 //mock service
-const items = [{ text: "item 1" },
+const items = [
+    { text: "item 1" },
     { text: "item 2" },
     { text: "get milk" }
 ];

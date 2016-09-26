@@ -1,26 +1,18 @@
 'use strict';
 
 const fs = require('fs');
+
 const express = require('express');
 const bodyparser = require('body-parser');
 
 const indexHTML = fs.readFileSync('./dist/ready/index.html');
 const appJS = fs.readFileSync('./dist/ready/app.js');
 
-const app = express();
+const todos = require('./todos');
 
-let hooks = [];
-const items = [],
-      addItem = item => {
-          items.push(item);
-          hooks.forEach(hook => hook());
-          hooks = [];
-      },
-      removeItem = index => {
-          items.splice(index, 1);
-          hooks.forEach(hook => hook());
-          hooks = [];
-      };
+const polling = require('./polling');
+
+const app = express();
 
 app.use(bodyparser.json());
 
@@ -39,25 +31,29 @@ app.get('/app.js', (req, res) => {
 });
 
 app.get('/list', (req, res) => {
-    res.json(items);
+    res.json(todos.list());
 });
 
-app.get('/polling', (req, res) => {
-    hooks.push(() => {
-        res.send('1');
-    });
+app.get('/poll', (req, res) => {
+    const unsubscribe = polling.subscribe(message => res.json(message));
+    req.on('abort', unsubscribe);
+    req.on('aborted', unsubscribe);
 });
 
 app.post('/add', (req, res) => {
     const item = { text: req.body.text };
-    addItem(item);
-    res.json({message: "added successfully"});
+    const message = { message: "added successfully" };
+    todos.add(item);
+    polling.publish(message);    
+    res.json(message);
 });
 
 app.post('/remove/:id', (req, res) => {
     const index = req.params.id;
-    removeItem(index);
-    res.json({message: "removed successfully"});
+    const message = { message: "removed successfully" };
+    todos.remove(index);
+    polling.publish(message);
+    res.json(message);
 });
 
 app.listen(6701);
