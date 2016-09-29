@@ -10,21 +10,17 @@ const flash = createFlash(document.querySelector('#flash'));
 const list = () => todoService.list().then(renderList);
 
 const add = text => todoService.add({ text })
-                            .then(flash('added successfully!'))
-                            .then(list);
+                            .then(flash('added successfully!'));
 
-const remove = index => todoService.remove(index)
-                            .then(flash('removed successfully!'))
-                            .then(list);
+const remove = removeUrl => todoService.remove(removeUrl)
+                            .then(flash('removed successfully!'));
 
 const mainLoop = () => todoService.pollChanges()
                             .then(list)
                             .then(mainLoop);
-
 
 window.actions = { add, remove };
 
 list();
 mainLoop();
 renderForm(document.querySelector('#todo-form'));
-

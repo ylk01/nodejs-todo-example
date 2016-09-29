@@ -1,7 +1,7 @@
-const createItem = ({ text }, index) => 
+const createItem = ({ text, removeUrl }) =>
     `<tr class="todo-item">
         <td>${text}</td>
-        <td><button onclick="actions.remove(${index})">delete</button></td>
+        <td><button onclick="actions.remove('${removeUrl}')">delete</button></td>
     </tr>`;
 
 module.exports = createItem;

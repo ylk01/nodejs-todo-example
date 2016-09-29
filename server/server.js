@@ -31,7 +31,10 @@ app.get('/app.js', (req, res) => {
 });
 
 app.get('/list', (req, res) => {
-    res.json(todos.list());
+    res.json(todos.list().map(item => {
+      item.removeUrl = `/remove/${item.id}`;
+      return item;
+    }));
 });
 
 app.get('/poll', (req, res) => {
@@ -44,14 +47,14 @@ app.post('/add', (req, res) => {
     const item = { text: req.body.text };
     const message = { message: "added successfully" };
     todos.add(item);
-    polling.publish(message);    
+    polling.publish(message);
     res.json(message);
 });
 
 app.post('/remove/:id', (req, res) => {
-    const index = req.params.id;
+    const id = req.params.id;
     const message = { message: "removed successfully" };
-    todos.remove(index);
+    todos.remove(id);
     polling.publish(message);
     res.json(message);
 });

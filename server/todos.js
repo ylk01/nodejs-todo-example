@@ -1,13 +1,16 @@
-const items = [];
+const uuid = require('uuid-v4');
+
+const items = new Map();
 
 module.exports = {
       add(item) {
-          items.push(item);          
+          item.id = uuid();
+          items.set(item.id, item);
       },
-      remove(index) {
-          items.splice(index, 1);
+      remove(id) {
+          items.delete(id);
       },
       list() {
-          return items;
+          return Array.from(items.values());
       }
 };

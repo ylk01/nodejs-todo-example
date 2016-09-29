@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-const apiURL = 'http://192.168.7.145:6701';
+const apiURL = 'http://localhost:6701';
 const todoService = {
     list() {
         return fetch(apiURL + '/list').then(data => data.json());
@@ -12,8 +12,8 @@ const todoService = {
             headers: new Headers({ 'Content-Type' : 'application/json'})
         }).then(data => data.json());
     },
-    remove(index) {
-        return fetch(apiURL + '/remove/' + index, { method: 'POST' }).then(data => data.json());
+    remove(removeUrl) {
+        return fetch(removeUrl, { method: 'POST' }).then(data => data.json());
     },
     pollChanges() {
         return fetch(apiURL + '/poll');
