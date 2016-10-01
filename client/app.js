@@ -1,4 +1,4 @@
-import { todoService } from './service';
+import todoService from './service';
 import createList from './list';
 import createFlash from './flash';
 import renderForm from './form';
@@ -16,7 +16,7 @@ const remove = removeUrl => todoService.remove(removeUrl)
                             .then(flash('removed successfully!'));
 
 const mainLoop = () => todoService.pollChanges()
-                            .then(list)
+                            .then(renderList)
                             .then(mainLoop);
 
 window.actions = { add, remove };

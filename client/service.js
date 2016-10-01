@@ -1,12 +1,13 @@
 import 'whatwg-fetch';
 
-const apiURL = 'http://localhost:6701';
+const delayPromise = ms => new Promise(y => setTimeout(y, ms)).then(() => console.log("after fail"));
+
 const todoService = {
     list() {
-        return fetch(apiURL + '/list').then(data => data.json());
+        return fetch('/list?').then(data => data.json());
     },
     add(item) {
-        return fetch(apiURL + '/add', {
+        return fetch('/add', {
             method: 'POST',
             body: JSON.stringify(item),
             headers: new Headers({ 'Content-Type' : 'application/json'})
@@ -16,30 +17,15 @@ const todoService = {
         return fetch(removeUrl, { method: 'POST' }).then(data => data.json());
     },
     pollChanges() {
-        return fetch(apiURL + '/poll');
+        return fetch('/poll?', {
+          headers: new Headers({
+            'pragma': 'no-cache',
+            'cache-control': 'no-cache'
+          })
+        })
+          .then(data => data.json())
+          .catch(error => delayPromise(2000));
     }
 };
 
-
-//mock service
-const items = [
-    { text: "item 1" },
-    { text: "item 2" },
-    { text: "get milk" }
-];
-
-const mockService = {
-    list() {
-        return Promise.resolve(items);
-    },
-    add(item) {
-        items.push(item);
-        return Promise.resolve({message: "added successfully"});
-    },
-    remove(index) {
-        items.splice(index, 1);
-        return Promise.resolve({message: "removed successfully"});
-    }
-}
-
-module.exports = { todoService, mockService };
+module.exports = todoService;

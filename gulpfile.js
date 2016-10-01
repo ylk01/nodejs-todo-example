@@ -7,7 +7,7 @@ gulp.task('default', () => {
   return gulp.src('client/*.js')
     .pipe(sourcemaps.init())
     .pipe(babel({
-      presets: ['es2015']
+      "presets": [ "es2015" ]
     }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/tmp'))

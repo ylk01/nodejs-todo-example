@@ -14,6 +14,11 @@ const polling = require('./polling');
 
 const app = express();
 
+const listWithActions = () => todos.list().map(item => {
+  item.removeUrl = `/remove/${item.id}`;
+  return item;
+});
+
 app.use(bodyparser.json());
 
 app.use((req, res, next) => {
@@ -31,10 +36,7 @@ app.get('/app.js', (req, res) => {
 });
 
 app.get('/list', (req, res) => {
-    res.json(todos.list().map(item => {
-      item.removeUrl = `/remove/${item.id}`;
-      return item;
-    }));
+    res.json(listWithActions());
 });
 
 app.get('/poll', (req, res) => {
@@ -47,16 +49,16 @@ app.post('/add', (req, res) => {
     const item = { text: req.body.text };
     const message = { message: "added successfully" };
     todos.add(item);
-    polling.publish(message);
     res.json(message);
+    polling.publish(listWithActions());
 });
 
 app.post('/remove/:id', (req, res) => {
     const id = req.params.id;
     const message = { message: "removed successfully" };
     todos.remove(id);
-    polling.publish(message);
     res.json(message);
+    polling.publish(listWithActions());
 });
 
 app.listen(6701);
