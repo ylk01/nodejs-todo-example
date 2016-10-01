@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-const delayPromise = ms => new Promise(y => setTimeout(y, ms)).then(() => console.log("after fail"));
+const delay = ms => new Promise(y => setTimeout(y, ms));
 
 const todoService = {
     list() {
@@ -24,7 +24,7 @@ const todoService = {
           })
         })
           .then(data => data.json())
-          .catch(error => delayPromise(2000));
+          .catch(() => delay(2000));
     }
 };
 
