@@ -11,15 +11,18 @@ This example is part of the teaching materials for the http://fullstack101.xyz c
 ##Getting Started
 
 ```bash
-#install gulp globally
-npm install -g gulp
-
 #install project dependencies
 npm install
 
+#check for errors
+npm run lint
+
 #build the frontend bundle
-gulp
+npm run build
+
+#run tests
+npm run test
 
 #run the server
-node server/server.js
+npm run start
 ```
